@@ -2,98 +2,879 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>光年之外 | 伪星际档案馆</title>
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>光年之外 | 星际伪档案馆</title>
   <meta
     name="description"
-    content="光年之外，一个瞎编但认真排版的星际档案馆。"
-  >
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-  <link
-    rel="stylesheet"
-    href="//cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple.css"
+    content="光年之外，一个把胡编乱造认真做成星际档案馆的网站。"
   >
   <style>
     :root {
-      --theme-color: #b8472f;
-      --theme-color-secondary: #0d6e6e;
-      --base-background-color: #f7f1e8;
-      --base-color: #261914;
-      --heading-color: #24130f;
-      --sidebar-background: linear-gradient(180deg, #1b222f 0%, #10161f 100%);
-      --sidebar-name-color: #f4ecdd;
-      --sidebar-nav-link-color: rgba(244, 236, 221, 0.84);
-      --sidebar-nav-link-color--active: #f5b15d;
-      --sidebar-nav-link-background-color--active: rgba(245, 177, 93, 0.12);
-      --cover-background-color: #10161f;
-      --cover-color: #f4ecdd;
-      --cover-heading-color: #fff5e8;
-      --cover-button-background: #b8472f;
-      --cover-button-color: #fff4ea;
-      --cover-button-border: none;
-      --code-inline-background: rgba(184, 71, 47, 0.08);
-      --blockquote-border-color: #b8472f;
-      --selection-color: rgba(184, 71, 47, 0.14);
-      --link-color: #9f3722;
-      --link-color--hover: #d15d3d;
-      --table-row-odd-background: rgba(16, 22, 31, 0.03);
+      --bg: #0f161d;
+      --bg-soft: #18222c;
+      --panel: rgba(19, 29, 38, 0.78);
+      --panel-strong: rgba(28, 42, 54, 0.92);
+      --line: rgba(242, 214, 168, 0.12);
+      --text: #f4ead7;
+      --muted: #b9b0a0;
+      --warm: #dd8d52;
+      --gold: #f1c98c;
+      --mint: #8ab3a4;
+      --danger: #f0725e;
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.36);
+      --content-width: 1200px;
+      --serif: "Iowan Old Style", "Palatino Linotype", "Noto Serif SC", "Songti SC", serif;
+      --sans: "Avenir Next", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
     }
 
     body {
+      margin: 0;
+      color: var(--text);
+      font-family: var(--sans);
       background:
-        radial-gradient(circle at top, rgba(245, 177, 93, 0.18), transparent 28%),
-        linear-gradient(180deg, #f8f2e8 0%, #f2e7d8 100%);
+        radial-gradient(circle at 15% 20%, rgba(221, 141, 82, 0.2), transparent 24%),
+        radial-gradient(circle at 80% 10%, rgba(138, 179, 164, 0.18), transparent 18%),
+        radial-gradient(circle at 50% 100%, rgba(241, 201, 140, 0.08), transparent 28%),
+        linear-gradient(180deg, #101821 0%, #0d1319 48%, #0b1117 100%);
+      min-height: 100vh;
     }
 
-    .cover-main {
-      max-width: 760px;
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.2;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      mask-image: radial-gradient(circle at center, black 40%, transparent 90%);
     }
 
-    .cover-main > p:last-child a:last-child {
-      background: transparent;
-      border: 1px solid rgba(255, 244, 234, 0.48);
+    a {
+      color: inherit;
+      text-decoration: none;
     }
 
-    .markdown-section {
-      max-width: 900px;
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(18px);
+      background: rgba(10, 15, 21, 0.68);
+      border-bottom: 1px solid rgba(241, 201, 140, 0.1);
     }
 
-    .markdown-section h1,
-    .markdown-section h2,
-    .markdown-section h3 {
-      letter-spacing: 0.02em;
+    .topbar-inner {
+      width: min(calc(100% - 32px), var(--content-width));
+      margin: 0 auto;
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
     }
 
-    .markdown-section strong {
-      color: #5d2015;
+    .brand {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
     }
 
-    .sidebar-toggle {
-      background: rgba(16, 22, 31, 0.94);
+    .brand-mark {
+      font-family: var(--serif);
+      font-size: 1.25rem;
+      letter-spacing: 0.08em;
+    }
+
+    .brand-note {
+      color: var(--muted);
+      font-size: 0.8rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 14px;
+    }
+
+    .nav a {
+      color: var(--muted);
+      font-size: 0.95rem;
+      padding: 8px 12px;
+      border-radius: 999px;
+      transition: background-color 180ms ease, color 180ms ease, transform 180ms ease;
+    }
+
+    .nav a:hover {
+      color: var(--text);
+      background: rgba(241, 201, 140, 0.08);
+      transform: translateY(-1px);
+    }
+
+    main {
+      width: min(calc(100% - 32px), var(--content-width));
+      margin: 0 auto;
+      padding: 32px 0 64px;
+    }
+
+    .hero {
+      min-height: calc(100vh - 120px);
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.9fr);
+      gap: 28px;
+      align-items: stretch;
+      padding: 24px 0 18px;
+    }
+
+    .hero-card,
+    .panel {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+
+    .hero-card {
+      border-radius: 36px;
+      padding: 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      position: relative;
+      background:
+        radial-gradient(circle at top right, rgba(221, 141, 82, 0.18), transparent 24%),
+        linear-gradient(145deg, rgba(16, 26, 36, 0.96), rgba(14, 21, 28, 0.84));
+    }
+
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      inset: auto -8% -18% auto;
+      width: 340px;
+      height: 340px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 35% 35%, rgba(241, 201, 140, 0.32), transparent 26%),
+        radial-gradient(circle, rgba(138, 179, 164, 0.2), transparent 58%);
+      filter: blur(10px);
+      opacity: 0.9;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      width: fit-content;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(241, 201, 140, 0.08);
+      color: var(--gold);
+      font-size: 0.82rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2,
+    h3 {
+      font-family: var(--serif);
+      margin: 0;
+      font-weight: 600;
+      line-height: 1.05;
+    }
+
+    h1 {
+      font-size: clamp(3.2rem, 7vw, 6.4rem);
+      max-width: 9ch;
+      margin-top: 18px;
+    }
+
+    .hero-copy {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-copy p {
+      max-width: 56ch;
+      color: var(--muted);
+      font-size: 1.02rem;
+      line-height: 1.8;
+      margin: 22px 0 0;
+    }
+
+    .hero-actions {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 30px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 0 22px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      font-weight: 600;
+      transition: transform 180ms ease, border-color 180ms ease, background-color 180ms ease;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+    }
+
+    .button-primary {
+      background: linear-gradient(135deg, var(--warm), #b25634);
+      color: #fff7ef;
+    }
+
+    .button-secondary {
+      border-color: rgba(241, 201, 140, 0.22);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text);
+    }
+
+    .hero-meta {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 36px;
+    }
+
+    .hero-metric {
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(241, 201, 140, 0.08);
+    }
+
+    .hero-metric strong {
+      display: block;
+      font-size: 1.3rem;
+      margin-bottom: 6px;
+      color: var(--gold);
+    }
+
+    .hero-metric span {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .signal-stack {
+      display: grid;
+      gap: 18px;
+    }
+
+    .panel {
+      border-radius: 28px;
+      padding: 24px;
+    }
+
+    .panel h2 {
+      font-size: 1.4rem;
+      margin-bottom: 18px;
+    }
+
+    .signal-list,
+    .brief-list,
+    .mission-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .signal-item,
+    .brief-item,
+    .mission-item {
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(241, 201, 140, 0.08);
+    }
+
+    .signal-item strong,
+    .brief-item strong,
+    .mission-item strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 1rem;
+    }
+
+    .signal-item p,
+    .brief-item p,
+    .mission-item p {
+      margin: 0;
+      line-height: 1.7;
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    .status-tag {
+      display: inline-flex;
+      width: fit-content;
+      margin-bottom: 10px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: rgba(138, 179, 164, 0.12);
+      color: var(--mint);
+    }
+
+    .status-tag.warn {
+      background: rgba(221, 141, 82, 0.12);
+      color: var(--gold);
+    }
+
+    .status-tag.alert {
+      background: rgba(240, 114, 94, 0.12);
+      color: var(--danger);
+    }
+
+    .section {
+      padding-top: 72px;
+    }
+
+    .section-heading {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: end;
+      margin-bottom: 26px;
+    }
+
+    .section-heading p {
+      margin: 12px 0 0;
+      max-width: 60ch;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    .section-heading h2 {
+      font-size: clamp(2rem, 4vw, 3.2rem);
+    }
+
+    .section-index {
+      color: rgba(241, 201, 140, 0.38);
+      font-size: 0.9rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      padding: 24px;
+      border-radius: 26px;
+      background: linear-gradient(180deg, rgba(23, 34, 44, 0.96), rgba(17, 25, 33, 0.88));
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      min-height: 250px;
+    }
+
+    .card .label {
+      display: inline-flex;
+      margin-bottom: 14px;
+      color: var(--gold);
+      font-size: 0.82rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .card h3 {
+      font-size: 1.6rem;
+      margin-bottom: 14px;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    .card dl {
+      margin: 18px 0 0;
+      display: grid;
+      gap: 10px;
+    }
+
+    .card dt {
+      color: rgba(241, 201, 140, 0.9);
+      font-size: 0.82rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .card dd {
+      margin: 4px 0 0;
+      color: var(--text);
+    }
+
+    .atlas {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
+      gap: 18px;
+    }
+
+    .atlas-map,
+    .atlas-side {
+      border-radius: 30px;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .atlas-map {
+      min-height: 460px;
+      padding: 28px;
+      background:
+        radial-gradient(circle at 18% 28%, rgba(241, 201, 140, 0.2), transparent 10%),
+        radial-gradient(circle at 76% 36%, rgba(138, 179, 164, 0.18), transparent 12%),
+        radial-gradient(circle at 58% 72%, rgba(221, 141, 82, 0.18), transparent 11%),
+        linear-gradient(180deg, rgba(14, 21, 28, 0.98), rgba(17, 25, 33, 0.92));
+      position: relative;
+    }
+
+    .atlas-map::before {
+      content: "";
+      position: absolute;
+      inset: 28px;
+      border-radius: 24px;
+      border: 1px dashed rgba(241, 201, 140, 0.12);
+    }
+
+    .map-node {
+      position: absolute;
+      display: grid;
+      gap: 8px;
+      max-width: 220px;
+    }
+
+    .node-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 0 8px rgba(241, 201, 140, 0.08);
+    }
+
+    .map-node strong {
+      font-size: 1rem;
+    }
+
+    .map-node span {
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+
+    .node-1 {
+      top: 16%;
+      left: 12%;
+    }
+
+    .node-2 {
+      top: 32%;
+      right: 12%;
+    }
+
+    .node-3 {
+      bottom: 14%;
+      left: 34%;
+    }
+
+    .atlas-side {
+      padding: 24px;
+      background: linear-gradient(180deg, rgba(23, 34, 44, 0.96), rgba(17, 25, 33, 0.88));
+    }
+
+    .mission-item.done strong::before,
+    .mission-item.todo strong::before {
+      display: inline-block;
+      width: 1.2em;
+    }
+
+    .mission-item.done strong::before {
+      content: "✓";
+      color: var(--mint);
+    }
+
+    .mission-item.todo strong::before {
+      content: "·";
+      color: var(--gold);
+      font-size: 1.3em;
+      line-height: 0;
+      vertical-align: middle;
+    }
+
+    .footer {
+      margin-top: 72px;
+      padding: 24px 0 12px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      border-top: 1px solid rgba(241, 201, 140, 0.08);
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 1080px) {
+      .hero,
+      .atlas,
+      .card-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        min-height: auto;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .topbar-inner,
+      main {
+        width: min(calc(100% - 20px), var(--content-width));
+      }
+
+      .topbar-inner {
+        padding: 14px 0;
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .nav {
+        justify-content: flex-start;
+      }
+
+      .hero-card,
+      .panel,
+      .card,
+      .atlas-side,
+      .atlas-map {
+        padding: 20px;
+        border-radius: 22px;
+      }
+
+      h1 {
+        font-size: clamp(2.6rem, 14vw, 4.4rem);
+      }
+
+      .hero-meta {
+        grid-template-columns: 1fr;
+      }
+
+      .section-heading {
+        grid-template-columns: 1fr;
+      }
+
+      .atlas-map {
+        min-height: 520px;
+      }
+
+      .node-1 {
+        top: 12%;
+        left: 10%;
+      }
+
+      .node-2 {
+        top: 42%;
+        right: 8%;
+      }
+
+      .node-3 {
+        bottom: 10%;
+        left: 12%;
+      }
+
+      .footer {
+        flex-direction: column;
+      }
     }
   </style>
 </head>
 <body>
-  <div id="app"></div>
-  <script>
-    window.$docsify = {
-      name: '光年之外',
-      nameLink: '#/',
-      repo: '123wwwbljik/light-wiki',
-      homepage: 'README.md',
-      loadSidebar: true,
-      loadNavbar: true,
-      coverpage: true,
-      auto2top: true,
-      subMaxLevel: 3,
-      themeColor: '#b8472f',
-      search: {
-        placeholder: '搜索档案',
-        noData: '没有检索到相关记录',
-      },
-    };
-  </script>
-  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="#top">
+        <span class="brand-mark">光年之外</span>
+        <span class="brand-note">Interstellar Fabrication Archive</span>
+      </a>
+      <nav class="nav" aria-label="主导航">
+        <a href="#characters">角色档案</a>
+        <a href="#abilities">异能目录</a>
+        <a href="#atlas">航线区域</a>
+        <a href="#missions">近期任务</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <article class="hero-card">
+        <div class="hero-copy">
+          <div class="eyebrow">伪档案馆已连接</div>
+          <h1>光年之外</h1>
+          <p>
+            这是一个把瞎编内容做得像正经宇宙资料站的地方。没有编年史的严肃，也没有百科站的拘谨，只有一些看起来煞有介事的角色档案、失真航线、边缘星港和不太可靠的任务记录。
+          </p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#characters">进入档案</a>
+            <a class="button button-secondary" href="https://github.com/123wwwbljik/light-wiki">查看仓库</a>
+          </div>
+        </div>
+
+        <div class="hero-meta">
+          <div class="hero-metric">
+            <strong>02</strong>
+            <span>已登记核心住民</span>
+          </div>
+          <div class="hero-metric">
+            <strong>03</strong>
+            <span>公开异常能力</span>
+          </div>
+          <div class="hero-metric">
+            <strong>07号</strong>
+            <span>边缘港口重点区域</span>
+          </div>
+        </div>
+      </article>
+
+      <aside class="signal-stack">
+        <section class="panel">
+          <h2>即时信号</h2>
+          <div class="signal-list">
+            <article class="signal-item">
+              <span class="status-tag">正常</span>
+              <strong>似锦仍处于高活跃进食状态</strong>
+              <p>最近一次目击记录发生在第七码头附近，现场只留下半车烤地瓜和一串无法解码的哼哼波形。</p>
+            </article>
+            <article class="signal-item">
+              <span class="status-tag warn">观察中</span>
+              <strong>折光邮差重复投递昨天的信</strong>
+              <p>时间戳互相矛盾，但签收记录完全一致，暂不排除航线时间褶皱的可能。</p>
+            </article>
+            <article class="signal-item">
+              <span class="status-tag alert">限制级</span>
+              <strong>无尽地瓜星系坐标再次失真</strong>
+              <p>所有试图回收该区域地图的勘测船，在返航后都会坚持说自己根本没有出发过。</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2>阅读导引</h2>
+          <div class="brief-list">
+            <article class="brief-item">
+              <strong>先看角色</strong>
+              <p>如果你第一次进站，先从两位核心住民入手，这一页的调性基本就定了。</p>
+            </article>
+            <article class="brief-item">
+              <strong>再看异能</strong>
+              <p>这里的能力不讲平衡，只讲听起来有没有一种“像真的一样离谱”的感觉。</p>
+            </article>
+            <article class="brief-item">
+              <strong>最后看地图</strong>
+              <p>区域和航线是这个世界观的支架，后续要扩站点，优先从这里长内容最稳。</p>
+            </article>
+          </div>
+        </section>
+      </aside>
+    </section>
+
+    <section class="section" id="characters">
+      <div class="section-heading">
+        <div>
+          <div class="section-index">Section 01</div>
+          <h2>核心住民</h2>
+          <p>目前首页先挂两份最能定调的角色档案，一份负责可爱又离谱，一份负责故作神秘但仍然离谱。</p>
+        </div>
+      </div>
+
+      <div class="card-grid">
+        <article class="card">
+          <span class="label">档案号 001</span>
+          <h3>似锦</h3>
+          <p>赛博佩奇猪，来自仙女座星系浪漫粉尘星云下属的哼哼星。活跃，能吃，拥有把任何紧张场面都带歪的稳定能力。</p>
+          <dl>
+            <div>
+              <dt>特征</dt>
+              <dd>超光速干饭、量子拱地、低频解密</dd>
+            </div>
+            <div>
+              <dt>口头禅</dt>
+              <dd>宇宙的尽头不是黑暗，是地瓜。</dd>
+            </div>
+            <div>
+              <dt>危险等级</dt>
+              <dd>中等偏香</dd>
+            </div>
+          </dl>
+        </article>
+
+        <article class="card">
+          <span class="label">档案号 002</span>
+          <h3>折光邮差</h3>
+          <p>长期游走在废弃航线中的匿名信使，脸部轮廓在每个港口都不一样。没人能证明他真实存在，但每个人都收过他的信。</p>
+          <dl>
+            <div>
+              <dt>特征</dt>
+              <dd>提前三天送达昨天的信件</dd>
+            </div>
+            <div>
+              <dt>习惯</dt>
+              <dd>只用过期星图导航，且极少迷路</dd>
+            </div>
+            <div>
+              <dt>传闻</dt>
+              <dd>与似锦共用某个不公开的食堂窗口</dd>
+            </div>
+          </dl>
+        </article>
+
+        <article class="card">
+          <span class="label">备注</span>
+          <h3>扩写建议</h3>
+          <p>如果你后面还想继续编，角色页最好沿着一个固定骨架走：身份、来源、视觉特征、行为习惯、传闻、能力和关联人物。这样越瞎越像正式站。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="abilities">
+      <div class="section-heading">
+        <div>
+          <div class="section-index">Section 02</div>
+          <h2>异能目录</h2>
+          <p>这部分不是战力系统，更像一套宇宙异常行为登记表。能力名称要响，效果要怪，解释则只给到刚好让人继续信一点的程度。</p>
+        </div>
+      </div>
+
+      <div class="card-grid">
+        <article class="card">
+          <span class="label">能力 01</span>
+          <h3>赛博哼哼</h3>
+          <p>通过特定低频哼声干扰简陋加密信道，同时还能把树上已经熟过头的果实震下来。适合情报战，也适合加餐。</p>
+        </article>
+        <article class="card">
+          <span class="label">能力 02</span>
+          <h3>量子拱地</h3>
+          <p>高强度拱地行为会在不同维度之间产生短时微型虫洞。稳定性一般，但赶食堂的时候成功率异常高。</p>
+        </article>
+        <article class="card">
+          <span class="label">能力 03</span>
+          <h3>似锦之光</h3>
+          <p>吸收恒星能量后，毛发表面会生成绸缎般反光层。没有决定性实战用途，但极适合用在所有宣传物料封面上。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="atlas">
+      <div class="section-heading">
+        <div>
+          <div class="section-index">Section 03</div>
+          <h2>航线与区域</h2>
+          <p>地图部分决定这个站能不能继续长。一个假的世界观，只有当地点之间有路径、有灰色地带、有重复出现的坐标时，才会看起来像真的。</p>
+        </div>
+      </div>
+
+      <div class="atlas">
+        <section class="atlas-map" aria-label="区域示意图">
+          <article class="map-node node-1">
+            <span class="node-dot"></span>
+            <strong>浪漫粉尘星云</strong>
+            <span>视觉极美，飞船过滤器极惨。所有人都说值得去一次，但没人建议去第二次。</span>
+          </article>
+          <article class="map-node node-2">
+            <span class="node-dot"></span>
+            <strong>第七码头</strong>
+            <span>边缘星港最著名的中转区，地下情报交易和奇怪餐车的密度都高得不太合理。</span>
+          </article>
+          <article class="map-node node-3">
+            <span class="node-dot"></span>
+            <strong>无尽地瓜星系</strong>
+            <span>据说由可食用小行星带组成，但所有地图抵达这里后都会开始自相矛盾。</span>
+          </article>
+        </section>
+
+        <aside class="atlas-side">
+          <h2>区域补记</h2>
+          <div class="brief-list">
+            <article class="brief-item">
+              <strong>浪漫粉尘星云</strong>
+              <p>高饱和粉尘会在航行记录里留下偏粉噪点，因此很多第一次来的调查员都以为自己的仪器坏了。</p>
+            </article>
+            <article class="brief-item">
+              <strong>第七码头</strong>
+              <p>凡是讲不清来源的货物、讲不清去向的乘客和讲不清昨天在哪里吃饭的人，最后通常都会出现在这里。</p>
+            </article>
+            <article class="brief-item">
+              <strong>无尽地瓜星系</strong>
+              <p>它可能存在，也可能只是似锦为了让别人请客而长期散播的一个大型宇宙谣言。</p>
+            </article>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section" id="missions">
+      <div class="section-heading">
+        <div>
+          <div class="section-index">Section 04</div>
+          <h2>近期任务</h2>
+          <p>这块保留成站点更新日志也行，保留成世界观内任务清单也行。现在我给你做成了两者之间的混合态，既能看，又方便后面继续加内容。</p>
+        </div>
+      </div>
+
+      <section class="panel">
+        <div class="mission-list">
+          <article class="mission-item done">
+            <strong>首页模板改为纯静态视觉页</strong>
+            <p>移除 Docsify 依赖，改成更完整的单页结构，标题、区域分组和视觉层次都重新整理过。</p>
+          </article>
+          <article class="mission-item done">
+            <strong>重建站点调性</strong>
+            <p>从默认文档站观感切到星际伪档案馆，配色、面板、地图区和顶部导航都已经统一。</p>
+          </article>
+          <article class="mission-item todo">
+            <strong>追加独立人物分卷</strong>
+            <p>下一步最合适的是拆出 `characters/` 一类页面，让核心住民有独立入口，而不是全堆在首页。</p>
+          </article>
+          <article class="mission-item todo">
+            <strong>补一页假的年代史</strong>
+            <p>如果要让这个世界观更像真的，时间线会比继续堆设定更值钱。</p>
+          </article>
+        </div>
+      </section>
+    </section>
+
+    <footer class="footer">
+      <span>本档案馆由惜别瞎编，现已从文档壳子切换为静态站。</span>
+      <span>站点名：光年之外</span>
+    </footer>
+  </main>
 </body>
 </html>
