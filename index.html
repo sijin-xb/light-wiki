@@ -8,6 +8,10 @@
     name="description"
     content="光年之外，一个把胡编乱造认真做成星际档案馆的网站。"
   >
+  <meta name="theme-color" content="#101821">
+  <meta property="og:title" content="光年之外 | 星际伪档案馆">
+  <meta property="og:description" content="边缘航线、匿名证词、失真记录与不太可靠的宇宙档案。">
+  <meta property="og:type" content="website">
   <style>
     :root {
       --bg: #0f161d;
@@ -63,6 +67,11 @@
     a {
       color: inherit;
       text-decoration: none;
+    }
+
+    ::selection {
+      background: rgba(241, 201, 140, 0.24);
+      color: #fff7ef;
     }
 
     p,
@@ -128,6 +137,12 @@
       color: var(--text);
       background: rgba(241, 201, 140, 0.08);
       transform: translateY(-1px);
+    }
+
+    .nav a:focus-visible,
+    .button:focus-visible {
+      outline: 2px solid rgba(241, 201, 140, 0.55);
+      outline-offset: 2px;
     }
 
     main {
@@ -220,6 +235,19 @@
       font-size: 1.02rem;
       line-height: 1.8;
       margin: 22px 0 0;
+    }
+
+    .orbital-note {
+      margin-top: 18px;
+      display: inline-flex;
+      width: fit-content;
+      padding: 10px 14px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(241, 201, 140, 0.08);
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.6;
     }
 
     .hero-actions {
@@ -466,6 +494,63 @@
       gap: 18px;
     }
 
+    .protocol-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+      gap: 18px;
+    }
+
+    .quote-panel {
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background:
+        radial-gradient(circle at top left, rgba(241, 201, 140, 0.16), transparent 22%),
+        linear-gradient(180deg, rgba(25, 35, 46, 0.98), rgba(15, 22, 29, 0.92));
+    }
+
+    .quote-panel blockquote {
+      margin: 0;
+      font-family: var(--serif);
+      font-size: clamp(1.6rem, 3vw, 2.6rem);
+      line-height: 1.25;
+      color: #fff5e8;
+    }
+
+    .quote-panel p {
+      margin: 18px 0 0;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    .protocol-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .protocol-item {
+      padding: 18px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(241, 201, 140, 0.08);
+    }
+
+    .protocol-item strong {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--gold);
+      font-size: 0.92rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .protocol-item p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
     .atlas {
       display: grid;
       grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
@@ -658,6 +743,8 @@
       .brief-item p,
       .signal-item p,
       .mission-item p,
+      .protocol-item p,
+      .quote-panel p,
       .card dd,
       .card .note {
         font-size: 0.98rem;
@@ -743,6 +830,7 @@
       .hero-card,
       .panel,
       .card,
+      .protocol-item,
       .atlas-side,
       .atlas-map {
         padding: 18px;
@@ -783,6 +871,7 @@
           <p>
             这里收纳的是边缘航线上的失真记录、匿名证词和来历不明的观测报告。它们看起来像被认真归档过，但每一页都故意漏掉了最关键的一点证据。
           </p>
+          <div class="orbital-note">航线备忘：建议从第七码头开始阅读，因为那里几乎所有谣言最后都会转成目击记录。</div>
           <div class="hero-actions">
             <a class="button button-primary" href="#characters">进入档案</a>
             <a class="button button-secondary" href="https://github.com/123wwwbljik/light-wiki">查看仓库</a>
@@ -791,7 +880,7 @@
 
         <div class="hero-meta">
           <div class="hero-metric">
-            <strong>04</strong>
+            <strong>05</strong>
             <span>核心档案已公开</span>
           </div>
           <div class="hero-metric">
@@ -867,6 +956,40 @@
           </article>
         </div>
       </article>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <div>
+          <div class="section-index">Section 00</div>
+          <h2>阅览协议</h2>
+          <p>档案馆不保证内容真实，只保证它们都曾被某人郑重其事地写下来。阅读前先理解这里的三条默认规则，很多矛盾会因此变得合理。</p>
+        </div>
+      </div>
+
+      <div class="protocol-grid">
+        <article class="panel quote-panel">
+          <blockquote>“最先失真的从来不是地图，而是人们确信自己看清了一切的那一刻。”</blockquote>
+          <p>这句匿名边注被钉在旧档案箱内侧，没有署名，没有年代，只有一道很浅的盐痕。</p>
+        </article>
+
+        <article class="panel">
+          <div class="protocol-list">
+            <article class="protocol-item">
+              <strong>规则一</strong>
+              <p>同一事件若出现三份互相矛盾的证词，不要先找谁说谎，先找它们为什么在同一天出现在你面前。</p>
+            </article>
+            <article class="protocol-item">
+              <strong>规则二</strong>
+              <p>角色档案并不等于人物真相。港口里最完整的履历表，往往恰好是改写次数最多的那份。</p>
+            </article>
+            <article class="protocol-item">
+              <strong>规则三</strong>
+              <p>地图只负责标记去过哪里，不负责解释那里发生了什么。真正危险的通常不是坐标，而是重复出现的细节。</p>
+            </article>
+          </div>
+        </article>
+      </div>
     </section>
 
     <section class="section" id="characters">
